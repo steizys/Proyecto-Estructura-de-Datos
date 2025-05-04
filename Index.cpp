@@ -1,6 +1,6 @@
-#include <string>
 #include <iostream>
-
+#include <stdlib.h>
+#include <time.h>
 using namespace std;
 
 struct Carta{ //Nodos de cartas 
@@ -9,7 +9,6 @@ struct Carta{ //Nodos de cartas
     string pinta;
     Carta *next;
 };
-
 struct Jugador{// Nodos de Jugador
     int nombre;
     Jugador *next;
@@ -49,7 +48,40 @@ void CrearCarta(Carta **p, string nombre, int valor, string pinta ){ //Procedimi
     }
 
 };
+Jugador *BuscarJugador (Jugador *malla, int i){ //Busca el nodo del jugador por su nombre
+    while (malla){
+        if (malla->nombre==i){
+            return malla;
+        }
+        malla=malla->next;
+    }
+    return NULL;
+};
 
+int ContarCartas(Carta* cartas){//Contar las cartas que tiene cada jugador
+    int ncartas=0;
+    while(cartas){
+        ncartas++;
+        cartas=cartas->next;
+    }
+    return ncartas;
+};
+void RepartirCarta(Carta **mazo, Jugador **malla) {  //Reparte de forma aleatoria las cartas del mazo a los jugadores
+    srand(time(NULL)); // Inicializar la semilla una vez
+
+    while (*mazo) { 
+        Carta *carta = *mazo;
+        int i = rand() % 4 + 1;
+        Jugador *jugador = BuscarJugador(*malla, i);
+        cout << "Numero random " << i << endl;
+        cout << "Jugador " << jugador->nombre<< endl;
+        if (ContarCartas(jugador->lista_cartas) < 14) {
+            cout<<"Numero de Cartas "<<ContarCartas(jugador->lista_cartas)<<endl;
+            //AsignarCarta(&(jugador->lista_cartas), carta);
+        }
+        *mazo = (*mazo)->next; 
+    }
+}
 void MostrarJugador(Jugador *p){
     cout << "P->";
     while (p){
@@ -58,7 +90,6 @@ void MostrarJugador(Jugador *p){
     }
     cout <<"NULL"<<endl;
 };
-
 void MostrarCarta(Carta *p){
     while (p){
         cout << p->nombre<< " | "<< p->pinta<< " | "<< p->valor<<endl;
@@ -66,6 +97,23 @@ void MostrarCarta(Carta *p){
     }
 };
 
+
+///////////////////////////////////////////////////
+///Insertar Sublista (Para Probar)
+void SubLista(Carta **sublist, string nombre, int valor, string pinta)
+{
+    Carta *newcarta = new Carta;
+    newcarta->nombre= nombre;
+    newcarta->valor= valor;
+    newcarta->pinta= pinta;
+    newcarta->next = *sublist;
+    *sublist = newcarta;
+}
+void InsertarCarta(Jugador *malla , int nombrej, string nombre, int valor, string pinta){
+    Jugador *jugador = BuscarJugador(malla, nombrej); ////Me da el nodo del jugador al que quiero insertar una carta 
+    SubLista(&(jugador->lista_cartas),nombre, valor, pinta);
+};
+////////////////////////////////////////////////////
 int main(){
     cout<<"Proyecto 1"<<endl;
     cout<<"Autoras: Amelie Moreno"<<endl;
@@ -80,11 +128,13 @@ int main(){
     InsertarJugador(&Malla,3);
     InsertarJugador(&Malla,4);
     MostrarJugador(Malla);
+    InsertarCarta(Malla , 1, "3",1, "diamante");
+    InsertarCarta(Malla , 1, "3",1, "picas");
     CrearCarta(&Mazo,"3",1, "diamante");
     CrearCarta(&Mazo,"3",1, "picas");
     CrearCarta(&Mazo,"3",1, "trebol");
     MostrarCarta(Mazo);
-
+    RepartirCarta(&Mazo, &Malla);
 
     system("pause");
 
