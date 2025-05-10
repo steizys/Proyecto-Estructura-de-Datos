@@ -14,6 +14,87 @@ struct Jugador{// Nodos de Jugador
     Jugador *next;
     Carta *lista_cartas; //Multilista que une a cada jugador con sus cartas
 };
+Carta *CrearCarta( string nombre, string pinta){ //Procedimiento para Crear las cartas del mazo
+    Carta* nuevo_carta = new Carta;
+    nuevo_carta->nombre= nombre;
+    nuevo_carta->pinta= pinta;
+    nuevo_carta->next= NULL;
+    return nuevo_carta;
+
+
+};
+void CrearMazo(Carta **p){ //Llenar jugadores por cola
+    string nombre="";
+    string pinta="";
+    for (int i = 1; i <= 13; i++){
+        if(i==1){
+            nombre="A";
+        }else if(i==2){
+            nombre="2";
+        }else if(i==3){
+            nombre="3";
+        }else if(i==4){
+            nombre="4";
+        }else if(i==5){
+            nombre="5";
+        }else if(i==6){
+            nombre="6";
+        }else if(i==7){
+            nombre="7";
+        }else if(i==8){
+            nombre="8";
+        }else if(i==9){
+            nombre="9";
+        }else if(i==10){
+            nombre="10";
+        }else if(i==11){
+            nombre="J";
+        }else if(i==12){
+            nombre="Q";
+        }else if(i==13){
+            nombre="K";
+        }else{
+        }
+        for (int j = 0; j < 4; j++){
+            Carta *carta = nullptr; 
+            if(j==0){
+                pinta="corazon";
+            }else if(j==1){
+                pinta="diamante";
+            }else if(j==2){
+                pinta="trebol";
+            }else if(j==3){
+                pinta="picas";
+            }
+           
+            carta=CrearCarta(nombre, pinta);
+            if (!(*p)){ // Si la lista está vacía
+                *p = carta; // Inserta directamente
+            }else{
+                Carta *aux = *p;
+                while (aux->next){ // Itera hasta el último nodo
+                    aux = aux->next;
+                }
+                aux->next = carta; // Inserta al final
+            }
+
+        }
+
+    }
+    nombre="Joker";
+    pinta="";
+    Carta *carta=CrearCarta(nombre, pinta);
+    Carta *aux = *p;
+    while (aux->next){ // Itera hasta el último nodo
+        aux = aux->next;
+    }
+    aux->next = carta; // Inserta al final
+    Carta *carta2=CrearCarta(nombre, pinta);
+    carta->next=carta2;
+    
+    
+
+};
 
 void InsertarJugador(Jugador **p, int valor){ //Llenar jugadores por cola
     Jugador* nuevoJugador = new Jugador;
@@ -31,22 +112,7 @@ void InsertarJugador(Jugador **p, int valor){ //Llenar jugadores por cola
     }
 
 };
-void CrearCarta(Carta **p, string nombre, string pinta ){ //Procedimiento para Crear las cartas del mazo
-    Carta* nuevo_carta = new Carta;
-    nuevo_carta->nombre= nombre;
-    nuevo_carta->pinta= pinta;
-    nuevo_carta->next= NULL;
-    if (!(*p)){ // Si la lista está vacía
-        *p = nuevo_carta; // Inserta directamente
-    }else{
-        Carta *aux = *p;
-        while (aux->next){ // Itera hasta el último nodo
-            aux = aux->next;
-        }
-        aux->next = nuevo_carta; // Inserta al final
-    }
 
-};
 Jugador *BuscarJugador (Jugador *malla, int i){ //Busca el nodo del jugador por su nombre
     while (malla){
         if (malla->nombre==i){
@@ -73,13 +139,9 @@ void Reparticion(Carta **mazo, Jugador **malla) {  //Reparte de forma aleatoria 
         Carta *carta = *mazo;
         *mazo = (*mazo)->next; // Sacamos carta de la cabeza del mazo
         carta->next = NULL; // Aseguramos que la carta a insertar no apunte a nada
-
         int i = rand() % 4 + 1;
         Jugador *jugador = BuscarJugador(*malla, i);
-        cout << "Numero random " << i << endl;
-        cout << "Jugador " << jugador->nombre<< endl;
-        if (ContarCartas(jugador->lista_cartas) < 14) {
-            cout<<"Numero de Cartas "<<ContarCartas(jugador->lista_cartas)<<endl;
+        if (ContarCartas(jugador->lista_cartas) <= 14) {
             Carta *aux=jugador->lista_cartas;
             if (!jugador->lista_cartas){
                 jugador->lista_cartas=carta;
@@ -105,7 +167,7 @@ void MostrarJugador(Jugador *p){
 };
 void MostrarCarta(Carta *p){ 
     while (p){
-        cout << p->nombre<< " | "<< p->pinta<< " | "<<endl;
+        cout << p->nombre<< " | "<< p->pinta<< " "<<endl;
         p = p->next;
     }
 };
@@ -135,6 +197,7 @@ int main(){
     Jugador *Malla = NULL;
     Carta *Mazo = NULL;
 
+
     InsertarJugador(&Malla,1);
     InsertarJugador(&Malla,2);
     InsertarJugador(&Malla,3);
@@ -142,24 +205,25 @@ int main(){
     MostrarJugador(Malla);
     InsertarCarta(Malla , 1, "3", "diamante");
     InsertarCarta(Malla , 1, "3","picas");
-    CrearCarta(&Mazo,"3", "diamante");
-    CrearCarta(&Mazo,"3", "picas");
-    CrearCarta(&Mazo,"3", "trebol");
+    CrearMazo(&Mazo);
+    //CrearCarta(&Mazo,"3", "picas");
+    //CrearCarta(&Mazo,"3", "trebol");
     MostrarCarta(Mazo);
     Reparticion(&Mazo, &Malla);
-    cout<<"//////////////////////////////// 1"<<endl;
+    cout<<"//// Jugador 1 ////"<<endl;
     Jugador *jugador = BuscarJugador(Malla, 1);
     MostrarCarta(jugador->lista_cartas);
-    cout<<"Jugador 2"<<endl;
+    cout<<"//// Jugador 2 ////"<<endl;
     Jugador *jugador2 = BuscarJugador(Malla, 2);
     MostrarCarta(jugador2->lista_cartas);
-    cout<<"Jugador 3"<<endl;
+    cout<<"//// Jugador 3 ////"<<endl;
     Jugador *jugador3 = BuscarJugador(Malla, 3);
     MostrarCarta(jugador3->lista_cartas);
-    cout<<"Jugador 4"<<endl;
+    cout<<"//// Jugador 4 ////"<<endl;
     Jugador *jugador4 = BuscarJugador(Malla, 4);
     MostrarCarta(jugador4->lista_cartas);
-
+    cout<<"----- Mazo -----"<<endl;
+    MostrarCarta(Mazo);
 
     system("pause");
 
