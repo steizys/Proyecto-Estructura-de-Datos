@@ -11,7 +11,7 @@ struct Carta{ //Nodos de cartas
 struct CartaSimple{
     string nombre;
     CartaSimple *next;
-}
+};
 
 struct Jugador{// Nodos de Jugador
     int nombre;

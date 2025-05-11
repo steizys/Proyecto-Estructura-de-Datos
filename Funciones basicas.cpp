@@ -68,6 +68,12 @@ int main(){
     cout<<"----- Mazo -----"<<endl;
     MostrarCarta(Mazo);
 
+    CartaSimple *Jerarquia = NULL;
+    LlenarJerarquia(&Jerarquia);
+    MostrarJerarquia(Jerarquia);
+    int posicion= PosJerarquia(Jerarquia, "K");
+    cout<<posicion<<endl;
+    
     system("pause");
 
     return 0;
