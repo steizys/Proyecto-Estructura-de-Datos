@@ -16,9 +16,16 @@ struct CartaSimple{
 
 struct Jugador{// Nodos de Jugador
     int nombre;
+    int puntos;
     Jugador *next;
     Carta *lista_cartas; //Multilista que une a cada jugador con sus cartas
 };
+
+void InsercionCabeza(Carta**p, Carta *q){
+        q->next= *p;
+        *p=q;
+};
+
 Carta *CrearCarta( string nombre, string pinta){ //Procedimiento para Crear las cartas del mazo
     Carta* nuevo_carta = new Carta;
     nuevo_carta->nombre= nombre;
@@ -97,6 +104,7 @@ void CrearMazo(Carta **p){ //Llenar jugadores por cola
 void InsertarJugador(Jugador **p, int valor){ //Llenar jugadores por cola
     Jugador* nuevoJugador = new Jugador;
     nuevoJugador->nombre= valor;
+    nuevoJugador->puntos= 0;
     nuevoJugador->next= NULL;
     nuevoJugador->lista_cartas= NULL;
     if (!(*p)){ // Si la lista está vacía
@@ -162,6 +170,7 @@ void SubLista(Carta **sublist, string nombre,  string pinta)
     newcarta->next = *sublist;
     *sublist = newcarta;
 };
+
 void InsertarCarta(Jugador *malla , int nombrej, string nombre, string pinta){
     Jugador *jugador = BuscarJugador(malla, nombrej); ////Me da el nodo del jugador al que quiero insertar una carta 
     SubLista(&(jugador->lista_cartas),nombre, pinta);
@@ -185,6 +194,7 @@ void MostrarJugador(Jugador *p){
     }
     cout <<"NULL"<<endl;
 };
+
 void MostrarCarta(Carta *p){ 
     while (p){
         cout << p->nombre<< " "<< p->pinta<< " "<<endl;
@@ -254,6 +264,103 @@ int PosJerarquia(CartaSimple *Jerarquia, string nombre){
 
 };
 
+int VecesAparicionValor (Carta*p, string value){ //Contas cuantas veces aparece una carta del mismo nombre
+    int cont=0;
+    Carta *aux= p;
+    if (!p){
+        return 0;
+    }else{
+        while (aux){
+            if (aux->nombre==value) cont++;
+            aux=aux->next;
+        }
+    }
+    return cont;
+}
+
+void EliminarTodosEncuentros(Carta**p, string nombre){ //Eliminar los encuentros en donde aparece ese nombre
+    if(!p) return;
+    Carta *auxnum= *p;
+    Carta *todelete; //nodo a eliminar
+    Carta *auxprev; //nodo antes del numero a eliminar
+    while (auxnum){
+        if (auxnum->nombre==nombre){
+            todelete = auxnum;
+            auxnum=auxnum->next;
+            if (!auxprev) {
+                //nodo a eliminar es la cabeza
+                *p = auxnum;
+            } else {
+                //nodo a eliminar no es la cabeza
+                auxprev->next = auxnum;
+            }
+            delete todelete;
+        } else {
+            auxprev = auxnum;
+            auxnum = auxnum->next;
+        }
+    }
+}
+
+void MostrarSi(Carta*p, string value){ //Mostrar las cartas que se quieren de un valor en especifico
+    Carta *aux= p;
+    while(aux){
+        if (aux->nombre==value){
+            cout << aux->nombre<< " "<< aux->pinta<< " "<<endl;
+        }
+        aux=aux->next;
+    }
+}
+
+void CartasPermitidas(Carta*p, int value){ //
+    Carta *aux= p;
+    Carta* mostradas = nullptr;
+    cout<<"Cartas que aparecen "<<value<<" veces: "<<endl;
+    while (aux) {
+        if (VecesAparicionValor(p, aux->nombre) >= value) {
+            // Verificamos si ya hemos mostrado cartas con este nombre
+            Carta* temp_mostradas = mostradas;
+            bool ya_mostrada = false;
+            while (temp_mostradas) {
+                if (temp_mostradas->nombre == aux->nombre) {
+                    ya_mostrada = true;
+                    break;
+                }
+                temp_mostradas = temp_mostradas->next;
+            }
+
+            // Si no hemos mostrado esta carta, mostramos todas las ocurrencias
+            if (!ya_mostrada) {
+                MostrarSi(p, aux->nombre);
+                // Agregamos el nombre a la lista de mostradas
+                Carta* nueva_mostrada = new Carta; // No necesitamos la pinta aquí
+                nueva_mostrada->nombre=aux->nombre;
+                nueva_mostrada->pinta="";
+                nueva_mostrada->next = mostradas;
+                mostradas = nueva_mostrada;
+            }
+        }
+        aux = aux->next;
+    }
+
+    // Liberamos la memoria de la lista 'mostradas'
+    Carta* temp;
+    while (mostradas) {
+        temp = mostradas;
+        mostradas = mostradas->next;
+        delete temp;
+    }
+}
+
+
+void DevolverCartasMazo (Carta**p, Carta**q){
+    Carta *aux= *q;
+    *q=aux->next;
+    aux->next=nullptr;
+    InsercionCabeza(p, aux);
+
+}
+
 ////////////////////////////////////////////////////
 int main(){
     cout<<"Proyecto 1"<<endl;
@@ -278,12 +385,9 @@ int main(){
     int ronda=1;
     //while(partidas<3){
         cout<<"Partida "<< partidas+1<<endl;
-        
             
        // while (ContarCartas(BuscarJugador(Malla, 1)->lista_cartas)>0 && ContarCartas(BuscarJugador(Malla, 2)->lista_cartas)>0 && ContarCartas(BuscarJugador(Malla, 3)->lista_cartas)>0 && ContarCartas(BuscarJugador(Malla, 4)->lista_cartas)>0){
-           cout<<"hola  "<<endl;
             if (ronda==1){
-                cout<<"hola gah "<<endl;
                 for (int i = 1; i <= 4; i++) {
                     Jugador *jugador = BuscarJugador(Malla, i);
                     cout<<jugador<<endl;
@@ -300,6 +404,8 @@ int main(){
             Jugador *jugador=BuscarJugador (Malla, j);
             cout<<" JUGADOR "<<j<<endl;
             Carta *cartasjugador=jugador->lista_cartas;
+            //Carta *aux=cartasjugador;
+            //aux=aux->next->next->next;
             MostrarCarta(cartasjugador);
        // } 
    // }    
