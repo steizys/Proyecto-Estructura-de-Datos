@@ -370,6 +370,7 @@ int main(){
     Jugador *Malla = NULL;
     Carta *Mazo = NULL;
 
+    cout << "\033[31mTexto en rojo\033[0m" << endl;
 
     InsertarJugador(&Malla,1);
     InsertarJugador(&Malla,2);
@@ -431,7 +432,7 @@ int main(){
                 } 
                     
             }
-            Jugador *jugador=BuscarJugador (Malla, j);
+            /*Jugador *jugador=BuscarJugador (Malla, j);
             cout<<" JUGADOR "<<j<<endl;
             Carta *cartasjugador=jugador->lista_cartas;
             //Carta *aux=cartasjugador;
@@ -447,7 +448,7 @@ int main(){
             cout<<" ---- Mazo ---- "<<endl;
             MostrarCarta(Mazo);
             cout<<" ---- Cartas Jugador ---- "<<endl;
-            MostrarCarta(cartasjugador);
+            MostrarCarta(cartasjugador);*/
        // } 
    // }    
     system("pause");
