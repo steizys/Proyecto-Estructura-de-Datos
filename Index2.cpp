@@ -700,7 +700,7 @@ int main(){
    
                 }
             }
-            cout<<" 3 pases";
+            //cout<<" 3 pases";
        // } 
    // }    
 

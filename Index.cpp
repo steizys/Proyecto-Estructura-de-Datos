@@ -710,6 +710,7 @@ int main(){
                     }
                     
                 }
+                
                 j++;
                 jugada++;
                 system("pause");
