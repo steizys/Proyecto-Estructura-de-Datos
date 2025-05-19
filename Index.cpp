@@ -480,7 +480,7 @@ void DevolverCartasMazo (Carta**Mazo, Carta**CartaJ, Carta**CartaM){
         InsercionCabeza(Mazo, *CartaM);
     }
 };
-void DeolverCartasJugadasMazo(Carta**Mazo, Carta**CartasJugadas){
+void DevolverCartasJugadasMazo(Carta**Mazo, Carta**CartasJugadas){
     Carta *aux= *CartasJugadas;
     while (aux && aux->next) {
         aux=aux->next;
@@ -525,32 +525,17 @@ int main(){
     /////////// Empieza el juego ///////////
     int j=0; //LLeva los turnos
     int partidas=0;
-    int ronda=1, pases =0, patron=2;
-    //////Cartas de jugadores ////////////////////
-    cout<<" *** JUGADOR 1 *** "<<endl;
-    Jugador *jugador = BuscarJugador(Malla, 1);
-    Carta *cartasjugador=jugador->lista_cartas;
-    MostrarCarta(cartasjugador);
-
-    cout<<" *** JUGADOR 2 *** "<<endl;
-    jugador = BuscarJugador(Malla, 2);
-    cartasjugador=jugador->lista_cartas;
-    MostrarCarta(cartasjugador);
-
-    cout<<" *** JUGADOR 3 *** "<<endl;
-    jugador = BuscarJugador(Malla, 3);
-    cartasjugador=jugador->lista_cartas;
-    MostrarCarta(cartasjugador);
-
-    cout<<" *** JUGADOR 4 *** "<<endl;
-    jugador = BuscarJugador(Malla, 4);
-    cartasjugador=jugador->lista_cartas;
-    MostrarCarta(cartasjugador);
+    int ronda=0, pases =0, patron=1;
+    int jugada=0;
     //while(partidas<3){
         cout<<"Partida "<< partidas+1<<endl;
-       // while (ContarCartas(BuscarJugador(Malla, 1)->lista_cartas)>0 && ContarCartas(BuscarJugador(Malla, 2)->lista_cartas)>0 && ContarCartas(BuscarJugador(Malla, 3)->lista_cartas)>0 && ContarCartas(BuscarJugador(Malla, 4)->lista_cartas)>0){
+        //Asigan puntos dependiendo de como ganaron en la partida
+        //Partida que finaliza cuando 3 se queden sin carta 
+        //while (ContarCartas(BuscarJugador(Malla, 1)->lista_cartas)>0 && ContarCartas(BuscarJugador(Malla, 2)->lista_cartas)>0 && ContarCartas(BuscarJugador(Malla, 3)->lista_cartas)>0 && ContarCartas(BuscarJugador(Malla, 4)->lista_cartas)>0){
+            ronda++;
             while(pases<3){ /// Cada ronda, se sale despues de tres pases
-                if (ronda==1){
+                cout<<"RONDA "<<ronda<<endl;
+                if (ronda==1 && jugada==0){
                     for (int i = 1; i <= 4; i++) {
                         Jugador *jugador = BuscarJugador(Malla, i);
                         Carta *cartasjugador=jugador->lista_cartas;
@@ -571,6 +556,7 @@ int main(){
                 cout<<"\n---------- MESA ----------"<<endl;
                 cout<<Mazo->nombre <<  " "<<Mazo->pinta<<endl;
                 int jerarCMesa=PosJerarquia(Jerarquia, Mazo->nombre); //Me indica la jerarquia que tiene la ultima carta de la mesa/mazo
+                int jerarCCarta; //Jerarquia de la carta que lance
                 cout<<"\n --- JUGADOR "<<j<<" --- "<<endl;
                 Carta *cartasjugador=jugador->lista_cartas;
                 MostrarCarta(cartasjugador);
@@ -610,23 +596,20 @@ int main(){
                     cout<<" Cantidad de Cartas "<<cantidadcartas<<endl;
                     cout<<" Cantidad de Cartas por patron "<<cantidadpatron<<endl;
                     cout<<" Cantidad de Cartas por jerarquia "<<cantidadjerarquia<<endl;
-
+                    //pases=0;
                     //Condiciones paar que pueda lanzar cartas
                     if (cantidadcartas==0){
                         cout<<"\nNo puedes jugar ya que no tienes cartas"<<endl;
                         cout<<"Tu turno pasa"<<endl;
                         pases++;
-                        j++;
                     } else if (cantidadpatron<=0){
                         cout<<"\nNo tienes cartas suficientes para jugar segun el patron"<<endl;
                         cout<<"Tu turno pasa"<<endl;
                         pases++;
-                        j++;
                     }else if(cantidadjerarquia<=0){
                         cout<<"\nNo tienes cartas con mayor jerarquia que la mesa"<<endl;
                         cout<<"Tu turno pasa"<<endl;
                         pases++;
-                        j++;
                     }else{
                         cout<<"\nIngresa tus cartas a jugar "<<endl;
                         cout<<"Recuerda la cantidad de cartas permitidas para jugar y su jerarquia "<<endl;
@@ -634,7 +617,7 @@ int main(){
                         cout<<Mazo->nombre <<  " "<<Mazo->pinta<<endl;
                         int cont_cartasingresadas=patron;
                         int i=1;
-                        string nombrecarta, pintacarta;
+                        string nombrecarta, pintacarta, primeracarta;
                         Carta *CartaJugadas=NULL;
 
                         /******** Ciclo ingreso de cartas  **********/
@@ -666,9 +649,45 @@ int main(){
                             }else{
                                 pintacarta="";
                             }
-                            bool x=BuscarCarta(cartasjugador, nombrecarta, pintacarta);
-                            cout<<"Boolano de buscar "<<x<<endl;
-                            Carta *cartaBuscada=BuscarCartaNode(cartasjugador, nombrecarta, pintacarta);
+                            
+                            if (BuscarCarta(cartasjugador, nombrecarta, pintacarta)){
+                                if ((VecesAparicionValor(cartasjugador,nombrecarta)+VecesAparicionValor(cartasjugador,"JOKER"))>=patron){
+                                    jerarCCarta=PosJerarquia(Jerarquia, nombrecarta);
+                                    if (jerarCCarta>jerarCMesa){
+                                        if (i==1){
+                                            pases=0;
+                                            primeracarta=nombrecarta;
+                                            Carta *cartaBuscada=BuscarCartaNode(cartasjugador, nombrecarta, pintacarta);
+                                            DevolverCartasMazo(&CartaJugadas,&cartasjugador ,&cartaBuscada);
+                                            cout<<"--- CARTAS JUGADAS  ---"<<endl;
+                                            MostrarCarta(CartaJugadas);
+                                            i++;
+                                            cont_cartasingresadas--;
+                                        }else{
+                                            if (nombrecarta==primeracarta || nombrecarta=="JOKER"){
+                                                pases=0;
+                                                primeracarta=nombrecarta;
+                                                Carta *cartaBuscada=BuscarCartaNode(cartasjugador, nombrecarta, pintacarta);
+                                                DevolverCartasMazo(&CartaJugadas,&cartasjugador ,&cartaBuscada);
+                                                cout<<"--- CARTAS JUGADAS  ---"<<endl;
+                                                MostrarCarta(CartaJugadas);
+                                                i++;
+                                                cont_cartasingresadas--;
+                                            }else{
+                                                cout<<"La carta ingresada no es del mismo tipo de tu primera carta o un JOKER que complete tu patron"<<endl;
+                                                cout<<"La primera carta que ingresaste fue: "<<primeracarta<<endl;
+                                            }      
+                                        }
+                                    }else{
+                                        cout<<"La carta ingresada es de una jerarquia menor a la que se encuentra en mesa"<<endl;
+                                    }
+                                }else{
+                                    cout<<"\nNo tienes suficientes cartas con ese nombre, para cumplir con el patron"<<endl;
+                                }
+                            }else{
+                                cout<<"\nLa carta ingresada no existe en tu mazo de cartas"<<endl;
+                            }
+                            /*Carta *cartaBuscada=BuscarCartaNode(cartasjugador, nombrecarta, pintacarta);
                             cout<<"Nodo buscado "<<cartaBuscada->nombre<<endl;
                             
                             cout<<"--- CARTAS JUGADAS ---"<<endl;
@@ -680,10 +699,10 @@ int main(){
                             MostrarCarta(CartaJugadas);
                             cout<<"--- CARTAS DEL JUGADOR  ---"<<endl;
                             MostrarCarta(cartasjugador);
-                            
-                            cont_cartasingresadas--;
+                            i++;
+                            cont_cartasingresadas--;*/
                         }
-                        DeolverCartasJugadasMazo(&Mazo, &CartaJugadas);
+                        DevolverCartasJugadasMazo(&Mazo, &CartaJugadas);
                         cout<<"--- MAZO  ---"<<endl;
                         MostrarCarta(Mazo);
                         cout<<"--- CARTAS JUGADAS ---"<<endl;
@@ -692,10 +711,11 @@ int main(){
                     
                 }
                 j++;
+                jugada++;
                 system("pause");
             }
             cout<<" 3 pases";
-       // } 
+       //} 
    // }    
 
     system("pause");
