@@ -100,6 +100,7 @@ void CrearMazo(Carta **p){ //Llenar jugadores por cola
     Carta *carta2=CrearCarta(nombre, pinta);
     carta->next=carta2;
 };
+
 void MostrarCarta(Carta *p){ 
     while (p){
         cout << p->nombre<< " "<< p->pinta<< " "<<endl;
@@ -527,12 +528,14 @@ int main(){
     int partidas=0;
     int ronda=0, pases =0, patron=1;
     int jugada=0;
+    int jerarCMesa = 0;
     //while(partidas<3){
         cout<<"Partida "<< partidas+1<<endl;
         //Asigan puntos dependiendo de como ganaron en la partida
         //Partida que finaliza cuando 3 se queden sin carta 
         //while (ContarCartas(BuscarJugador(Malla, 1)->lista_cartas)>0 && ContarCartas(BuscarJugador(Malla, 2)->lista_cartas)>0 && ContarCartas(BuscarJugador(Malla, 3)->lista_cartas)>0 && ContarCartas(BuscarJugador(Malla, 4)->lista_cartas)>0){
             ronda++;
+            //se lmpia
             while(pases<3){ /// Cada ronda, se sale despues de tres pases
                 cout<<"RONDA "<<ronda<<endl;
                 if (ronda==1 && jugada==0){
@@ -607,6 +610,8 @@ int main(){
                         cout<<"Tu turno pasa"<<endl;
                         pases++;
                     }else if(cantidadjerarquia<=0){
+                        cout<<"\nCartas jugador"<<endl;
+                        MostrarCarta(cartasjugador);
                         cout<<"\nNo tienes cartas con mayor jerarquia que la mesa"<<endl;
                         cout<<"Tu turno pasa"<<endl;
                         pases++;
@@ -665,6 +670,7 @@ int main(){
                                             cont_cartasingresadas--;
                                         }else{
                                             if (nombrecarta==primeracarta || nombrecarta=="JOKER"){
+
                                                 pases=0;
                                                 primeracarta=nombrecarta;
                                                 Carta *cartaBuscada=BuscarCartaNode(cartasjugador, nombrecarta, pintacarta);
@@ -702,6 +708,9 @@ int main(){
                             i++;
                             cont_cartasingresadas--;*/
                         }
+                        if (CartaJugadas->nombre=="8"){
+                            pases=3;
+                        }
                         DevolverCartasJugadasMazo(&Mazo, &CartaJugadas);
                         cout<<"--- MAZO  ---"<<endl;
                         MostrarCarta(Mazo);
@@ -710,7 +719,7 @@ int main(){
                     }
                     
                 }
-                
+
                 j++;
                 jugada++;
                 system("pause");
