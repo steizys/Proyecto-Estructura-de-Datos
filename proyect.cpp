@@ -525,7 +525,7 @@ int main() {
         InsertarJugador(&Malla, i);
     }
     CrearMazo(&Mazo);
-    Reparticion(&Mazo, &Malla);
+    
 
     // Variables del juego
     int j = 0; // Turno actual
@@ -533,6 +533,7 @@ int main() {
     int ronda = 0, pasesConsecutivos = 0, patron = 1;
     int jugada = 0;
     int jerarCMesa = 0;
+    
     bool rondaTerminada = false;
     int ultimoJugadorQueJugo = 0;
     bool tresDePicasEnMesa = false;
@@ -541,7 +542,7 @@ int main() {
     while (partidas < 3) {
         cout << "\n=== PARTIDA " << partidas + 1 << " ===" << endl;
         ronda = 0;
-
+        Reparticion(&Mazo, &Malla);
         // Bucle de rondas
         while (ContarCartas(BuscarJugador(Malla, 1)->lista_cartas) > 0 &&
                ContarCartas(BuscarJugador(Malla, 2)->lista_cartas) > 0 &&
@@ -749,27 +750,26 @@ int main() {
             if (ultimoJugadorQueJugo > 0) {
                 cout << "\n--- FIN DE RONDA " << ronda << " ---" << endl;
                 
-                if (tresDePicasEnMesa) {
-                    cout << "El 3 de picas fue jugado. Patron reset a single para nueva ronda." << endl;
-                    patron = 1;
-                } else {
-                    // El último jugador que jugó elige el nuevo patrón
-                    cout << "Jugador " << ultimoJugadorQueJugo << " elige el nuevo patron." << endl;
+            // El último jugador que jugó elige el nuevo patrón
+                cout << "Jugador " << ultimoJugadorQueJugo << " elige el nuevo patron." << endl;
+                Jugador *jugador = BuscarJugador(Malla, ultimoJugadorQueJugo);
+                Carta *cartasjugador = jugador->lista_cartas;
+                cout << "\nTus cartas:" << endl;
+                MostrarCarta(jugador->lista_cartas);
+                bool patronValido = false;
+                while (!patronValido) {
+                    cout << "Seleccione el patron para la siguiente ronda:\n";
+                    cout << "1. Single (1 carta)\n2. Doble (2 cartas)\n3. Triple (3 cartas)\n4. Poker (4 cartas)\n";
+                    cout << "Opcion: ";
+                    cin >> patron;
                     
-                    bool patronValido = false;
-                    while (!patronValido) {
-                        cout << "Seleccione el patron para la siguiente ronda:\n";
-                        cout << "1. Single (1 carta)\n2. Doble (2 cartas)\n3. Triple (3 cartas)\n4. Poker (4 cartas)\n";
-                        cout << "Opcion: ";
-                        cin >> patron;
-                        
-                        if (patron >= 1 && patron <= 4) {
-                            patronValido = true;
-                        } else {
-                            cout << "Opcion invalida. Por favor elige entre 1 y 4." << endl;
-                        }
+                    if (patron >= 1 && patron <= 4) {
+                        patronValido = true;
+                    } else {
+                        cout << "Opcion invalida. Por favor elige entre 1 y 4." << endl;
                     }
                 }
+                
 
                 // Limpiar la mesa (moviendo las cartas al mazo)
                 if (CartasEnMesa) {
