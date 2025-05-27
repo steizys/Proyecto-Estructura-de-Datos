@@ -916,9 +916,7 @@ int main() {
         InsertarJugador(&Malla, i);
     }
     CrearMazo(&Mazo);
-    //InsercionCabeza(&Mazo, CrearCarta("8", "Pica"));
-    //InsercionCabeza(&Mazo, CrearCarta("7", "Pica"));
-    //InsercionCabeza(&Mazo, CrearCarta("10", "Corazon"));
+
 
     // Variables del juego
     int j = 0; // Turno actual
@@ -927,6 +925,8 @@ int main() {
     int jugada = 0;
     int jerarCMesa = 0;
     int terminarRonda = 0;
+=======
+    
     bool rondaTerminada = false;
     int ultimoJugadorQueJugo = 0;
     bool tresDePicasEnMesa = false;
@@ -964,6 +964,8 @@ int main() {
         Podio=NULL;
         Magnate=NULL;
         
+=======
+        Reparticion(&Mazo, &Malla);
         // Bucle de rondas
         while (JugadoresSinCartas(Malla) < 3 && !terminarRonda) {
             ronda++;
@@ -1256,6 +1258,16 @@ int main() {
                 bool patronValido = false;
                 while (!patronValido) {
                     cout << "\nSeleccione el patron para la siguiente ronda:\n";
+=======
+            // El último jugador que jugó elige el nuevo patrón
+                cout << "Jugador " << ultimoJugadorQueJugo << " elige el nuevo patron." << endl;
+                Jugador *jugador = BuscarJugador(Malla, ultimoJugadorQueJugo);
+                Carta *cartasjugador = jugador->lista_cartas;
+                cout << "\nTus cartas:" << endl;
+                MostrarCarta(jugador->lista_cartas);
+                bool patronValido = false;
+                while (!patronValido) {
+                    cout << "Seleccione el patron para la siguiente ronda:\n";
                     cout << "1. Single (1 carta)\n2. Doble (2 cartas)\n3. Triple (3 cartas)\n4. Poker (4 cartas)\n";
                     cout << "Opcion: ";
                     cin >> patron;
@@ -1266,6 +1278,9 @@ int main() {
                         }else{
                             cout << "Opcion invalida. No tienes cartas suficientes para este patron." << endl;
                         }
+=======
+                        patronValido = true;
+
                     } else {
                         cout << "Opcion invalida. Por favor elige entre 1 y 4." << endl;
                     }
@@ -1273,6 +1288,9 @@ int main() {
                 }
                 
                 // Limpiar la mesa
+=======
+
+                // Limpiar la mesa (moviendo las cartas al mazo)
                 if (CartasEnMesa) {
                     DevolverCartasJugadasMazo(&Mazo, &CartasEnMesa);
                 }
