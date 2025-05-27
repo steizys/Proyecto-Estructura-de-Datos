@@ -42,6 +42,7 @@ const string FONDO_MAGENTA = "\x1b[45m";
 const string FONDO_CIAN = "\x1b[46m";
 const string FONDO_BLANCO = "\x1b[47m";
 
+
 struct Carta { // Nodos de cartas 
     string nombre;
     string pinta;
@@ -777,7 +778,9 @@ void MoverDosMayores(Jugador* origen, Jugador* destino, CartaSimple* Jerarquia) 
         }
     }
     if (!origen->lista_cartas || !origen->lista_cartas->next) {
+
         cout << NEGRITA << ROJO << "El jugador no tiene suficientes cartas."<<RESET<<endl;
+
         return;
     }
 }
@@ -786,7 +789,9 @@ void MoverDosMayores(Jugador* origen, Jugador* destino, CartaSimple* Jerarquia) 
 void MoverCartasElegidas(Jugador* origen, Jugador* destino) {
     if (!origen || !destino || !origen->lista_cartas) return;
 
+
     cout << NEGRITA << VERDE << "Cartas del jugador " << origen->nombre << ":\n"<< RESET;
+
     MostrarCarta(origen->lista_cartas);
 
     int cartasSeleccionadas = 0;
@@ -814,6 +819,7 @@ void MoverCartasElegidas(Jugador* origen, Jugador* destino) {
             cout << "   4 = Pica"<<endl;
             cin >> pinta;
             cout << RESET;
+
             if (pinta == "1") pinta = "Diamante";
             else if (pinta == "2") pinta = "Corazon";
             else if (pinta == "3") pinta = "Trebol";
@@ -847,6 +853,7 @@ void MoverCartasElegidas(Jugador* origen, Jugador* destino) {
 
         if (!actual) {
             cout << NEGRITA << MAGENTA<< "Carta no encontrada. Intente nuevamente.\n" <<RESET<<endl;
+
         }
     }
 }
@@ -887,7 +894,9 @@ void MoverMayorCarta(Jugador* origen, Jugador* destino, CartaSimple* Jerarquia) 
 void MoverCartaElegida(Jugador* origen, Jugador* destino) {
     if (!origen || !destino || !origen->lista_cartas) return;
 
+
     cout <<NEGRITA<<VERDE<<"Cartas del jugador " << origen->nombre << ":\n" <<RESET;
+
     MostrarCarta(origen->lista_cartas);
 
     while (true) {
@@ -913,6 +922,7 @@ void MoverCartaElegida(Jugador* origen, Jugador* destino) {
             cout << "   4 = Pica"<<endl;
             cin >> pinta;
             cout << RESET;
+
             if (pinta == "1") pinta = "Diamante";
             else if (pinta == "2") pinta = "Corazon";
             else if (pinta == "3") pinta = "Trebol";
@@ -938,6 +948,7 @@ void MoverCartaElegida(Jugador* origen, Jugador* destino) {
                 destino->lista_cartas = actual;
                 
                 cout << NEGRITA <<VERDE << "Carta movida exitosamente.\n"<<RESET<<endl;
+
                 return; // Terminar después de mover una carta
             }
             prev = actual;
@@ -945,6 +956,7 @@ void MoverCartaElegida(Jugador* origen, Jugador* destino) {
         }
 
         cout << NEGRITA << ROJO << "Carta no encontrada. Intente nuevamente.\n"<<RESET;
+
     }
 }
 
@@ -964,6 +976,7 @@ void InsertarCarta(Jugador *malla, int nombrej, string nombre, string pinta) {
 
 // Función principal del juego
 int main() {
+
     enableAnsiColors();
     cout <<AMARILLO<< "  __  __       _____ _  _        _______ ______ \n";
     cout <<AMARILLO<< " |  \\/  |  /\\  / ____| \\ | |  /\\|__  __| ____| \n";
@@ -974,6 +987,7 @@ int main() {
     cout << "                                                    \n"; 
     cout << NEGRITA << CIAN  << "AUTORAS: Amelie Moreno, Gabriela Cantos, Steizy Fornica" << endl;
     cout << RESET << endl; 
+
 
     // Inicialización de estructuras
     Jugador *Malla = NULL;
@@ -987,10 +1001,10 @@ int main() {
     for (int i = 1; i <= 4; i++) {
         InsertarJugador(&Malla, i);
     }
-    
-    //CrearMazo(&Mazo);
-    InsercionCabeza(&Mazo, CrearCarta("8", "Pica"));
-    InsercionCabeza(&Mazo, CrearCarta("K", "Pica"));
+
+    CrearMazo(&Mazo);
+
+
 
     // Variables del juego
     int j = 0; // Turno actual
@@ -999,6 +1013,7 @@ int main() {
     int jugada = 0;
     int jerarCMesa = 0;
     int terminarRonda = 0;
+
     bool rondaTerminada = false;
     int ultimoJugadorQueJugo = 0;
     bool tresDePicasEnMesa = false;
@@ -1008,27 +1023,8 @@ int main() {
     //// PODIO ////
     int Magnate; int Rico; int Pobre; int Mendigo;
 
-    //Reparticion(&Mazo, &Malla);
+    Reparticion(&Mazo, &Malla);
 
-    //JUGADOR 1
-    Jugador *jugador = BuscarJugador(Malla,1);
-    InsertarCarta(jugador, 1, "2","Corazon");
-    InsertarCarta(jugador, 1, "2","Diamante");
-
-    //JUGADOR 2
-    Jugador *jugador2 = BuscarJugador(Malla,2);
-    InsertarCarta(jugador2, 2, "3","Pica");
-    InsertarCarta(jugador2, 2, "3","Diamante");
-
-    //JUGADOR 3
-    Jugador *jugador3 = BuscarJugador(Malla,3);
-    InsertarCarta(jugador3, 3, "7","Corazon");
-    InsertarCarta(jugador3, 3, "5","Corazon");
-
-    //JUGADOR 4
-    Jugador *jugador4 = BuscarJugador(Malla,4);
-    InsertarCarta(jugador4, 4, "5","Corazon");
-    InsertarCarta(jugador4, 4, "8","Corazon");
 
     // Bucle principal del juego
     while (partidas < 3 ) {
@@ -1037,6 +1033,7 @@ int main() {
         ronda = 0;
         Podio=NULL;
         CambioMagnate=false;
+        
         
         // Bucle de rondas
         while (JugadoresSinCartas(Malla) < 3 && !terminarRonda) {
@@ -1048,12 +1045,14 @@ int main() {
                 terminarRonda=true;
                 continue;
             }
+
             cout << NEGRITA << VERDE; 
             cout << "=============== R O N D A   " << ronda << " ===============\n";
             cout << RESET; 
             cout << BLANCO << "        Patron actual: " << CIAN << patron << " carta(s)\n"; 
             cout << RESET; 
             cout << "\n"; 
+
             
             // Primera jugada especial
             if (partidas == 1 && jugada == 0) {
@@ -1062,7 +1061,9 @@ int main() {
                     if (BuscarCarta(temp->lista_cartas, "3", "Diamante")) {
                         j = temp->nombre;
                         ultimoJugadorQueJugo = j;
+
                         cout << NEGRITA << AZUL<<"\nJugador " << j << " inicia la partida con el 3 de diamantes." << RESET<<endl;
+
                         Carta *CartaMesa = BuscarCartaNode(temp->lista_cartas, "3", "Diamante");
                         DevolverCartasMazo(&CartasEnMesa, &temp->lista_cartas, &CartaMesa);
                         patron = 1;
@@ -1076,7 +1077,9 @@ int main() {
                 
                // Iniciar ronda con el último jugador que jugó
                 j = ultimoJugadorQueJugo;
+
                 cout << NEGRITA << AZUL<<"\nJugador " << j << " inicia la ronda por ser el último que jugó." << RESET<< endl;
+
             }
             //if (JugadoresSinCartas(Malla) >= 3) continue;
             // Bucle de turnos en la ronda
@@ -1090,6 +1093,7 @@ int main() {
                     rondaTerminada=true;
                     continue;
                 } 
+              
                 //cout<< partidas<<" Partidas"<<endl;
                 //cout<<JugadoresSinCartas(Malla)<<" jugadores"<<endl;
                 if (Podio){
@@ -1097,11 +1101,13 @@ int main() {
                 }
                 if(Podio && partidas>1 && JugadoresSinCartas(Malla)==1){
                     if(Podio->nombre!=Magnate){
+
                         CambioMagnate=true;
                         Jugador *CartasMagnateViejo= BuscarJugador(Malla, Magnate);
                         DevolverCartasJugadasMazo(&Mazo, &CartasMagnateViejo->lista_cartas);
 
                     }
+
                 }
                 cout<< NEGRO<<"\nJugadores sin carta dentro ronda: "<<JugadoresSinCartas(Malla)<<endl;
                 cout << "Turno del Jugador " << j << endl<<RESET;
@@ -1110,6 +1116,16 @@ int main() {
                 cout << NEGRO << "Carta en mesa: "<<endl;
                 if (CartasEnMesa) {
                     cout << CartasEnMesa->nombre << " " << CartasEnMesa->pinta << RESET<<endl;
+
+                }*/
+                cout<<"Jugadores sin carta dentro ronda: "<<JugadoresSinCartas(Malla)<<endl;
+                cout << "\nTurno del Jugador " << j << endl;
+
+                // Mostrar estado actual
+                cout << "Carta en mesa: ";
+                if (CartasEnMesa) {
+                    cout << CartasEnMesa->nombre << " " << CartasEnMesa->pinta << endl;
+
                     jerarCMesa = PosJerarquia(Jerarquia, CartasEnMesa->nombre);
                 } else {
                     cout << "Ninguna" << endl;
@@ -1130,6 +1146,7 @@ int main() {
                 if (tresDePicasEnMesa) {
                     cout << ROJO << "\nHay un 3 de picas en mesa. Nadie puede jugar hasta nueva ronda." << endl;
                     cout << RESET;
+
                     rondaTerminada=true;
                     pasesConsecutivos++;
                     j++;
@@ -1139,14 +1156,17 @@ int main() {
 
                 // Mostrar opciones válidas
                 if (patron > 1) {
+
                     cout << CIAN << "\nCartas que cumplen con el patron de " << patron << ":" << endl;
                     cout << RESET;
+
                     CartasPermitidas(jugador->lista_cartas, patron);
                 }
 
                 // Opciones del jugador
                 int op = 0;
                 while (op != 1 && op != 2) {
+
                     cout<< NEGRITA<<AMARILLO;
                     cout << "\n";
                     cout << "---------------------------\n";
@@ -1163,12 +1183,15 @@ int main() {
                     cin >> op;
                     if (op != 1 && op != 2) {
                         cout << ROJO << NEGRITA << "Opcion invalida!" << RESET << endl;
+
                     }
                 }
 
                 if (op == 2) { // Pasar turno
                     pasesConsecutivos++;
+
                     cout << NEGRITA<<VERDE << "Jugador " << j << " pasa su turno." << RESET<< endl;
+
                     j++;
                 } else { // Intentar jugar cartas
                     int cantidadCartas = ContarCartas(jugador->lista_cartas);
@@ -1179,6 +1202,7 @@ int main() {
                     // Validar si puede jugar
                     if (cantidadCartas == 0) {
                         //terminarRonda++;
+
                         cout << NEGRITA << MAGENTA<< "No tienes cartas para jugar. Turno pasado." << RESET << endl;
                         //Insertar_ColaPodio(&Podio,(jugador->nombre));
                         pasesConsecutivos++;
@@ -1187,11 +1211,13 @@ int main() {
                         pasesConsecutivos++;
                     } else if (cantidadJerarquia <= 0 && !tiene3Picas && !BuscarCarta(jugador->lista_cartas, "JOKER", "")) {
                         cout << NEGRITA << MAGENTA<< "No tienes cartas con mayor jerarquia. Turno pasado." << RESET << endl;
+
                         pasesConsecutivos++;
                     } else {
                         pasesConsecutivos = 0;
                         
                         cout << NEGRITA<<CIAN << "\nIngresa las cartas a jugar (" << patron << "):" << RESET<<endl;
+
 
                         Carta *CartaJugadas = NULL;
                         string primerNombre = "";
@@ -1199,11 +1225,14 @@ int main() {
 
                         for (int i = 0; i < patron; ) {
                             if (errorIngreso) {
+
                                 cout << AMARILLO << NEGRITA << "\nIntenta nuevamente la carta " << (i + 1) << ":" << endl<< RESET;
+
                                 errorIngreso = false;
                             }
 
                             string nombrecarta, pintacarta;
+
                             cout<< NEGRO<< NEGRITA<<"   NOTA: Si deseas  completar tus cartas con JOKER, debes escribir primero tus cartas a completar y despues el JOKER"<<RESET<<endl;
                             cout << NEGRO<< NEGRITA<<"   CARTA " << (i + 1) << ":" << RESET<< endl;
                             cout << NEGRITA << CIAN; 
@@ -1214,6 +1243,7 @@ int main() {
                             cout << "Nombre: 3 4 5 6 7 8 9 10 J Q K A 2 JOKER\n";
                             cout << "Ingrese el nombre de la carta: ";
                             cout << RESET<< "\n";
+
                             cin >> nombrecarta;
                             transform(nombrecarta.begin(), nombrecarta.end(), nombrecarta.begin(), ::toupper);
 
@@ -1225,13 +1255,16 @@ int main() {
                                 cout << "   2 = Corazon"<<endl;
                                 cout << "   3 = Trebol"<<endl;
                                 cout << "   4 = Pica"<<endl;
+                                
                                 cin >> pintacarta;
                                 if (pintacarta == "1") pintacarta = "Diamante";
                                 else if (pintacarta == "2") pintacarta = "Corazon";
                                 else if (pintacarta == "3") pintacarta = "Trebol";
                                 else if (pintacarta == "4") pintacarta = "Pica";
                                 else {
+
                                     cout << NEGRITA<<AMARILLO <<"Pinta invalida! Por favor ingresa 1, 2, 3 o 4." << RESET << endl;
+
                                     errorIngreso = true;
                                     continue;
                                 }
@@ -1241,12 +1274,15 @@ int main() {
 
                             // Validaciones
                             if (!BuscarCarta(jugador->lista_cartas, nombrecarta, pintacarta)) {
+
                                 cout << NEGRITA << MAGENTA<< "No tienes esa carta en tu mazo! Por favor elige otra." << RESET << endl;
+
                                 errorIngreso = true;
                                 continue;
                             }
                             if (i == 0) {
                                 primerNombre = nombrecarta;
+
                                 if (!tiene3Picas && nombrecarta != "JOKER" && PosJerarquia(Jerarquia, nombrecarta) <= jerarCMesa) {
                                     cout << NEGRITA << MAGENTA<< "La carta no supera la jerarquia de la mesa (" 
                                          << CartasEnMesa->nombre << " " << CartasEnMesa->pinta << ")." << RESET << endl;
@@ -1264,13 +1300,16 @@ int main() {
                                 }else if (tiene3Picas && pintacarta!="Pica" && PosJerarquia(Jerarquia, nombrecarta) <= jerarCMesa){
                                     cout << NEGRITA << MAGENTA<< "La carta no supera la jerarquia de la mesa (" 
                                          << CartasEnMesa->nombre << " " << CartasEnMesa->pinta << ")." << RESET << endl;
+
                                     errorIngreso = true;
                                     continue;
                                 }
                             } else {
                                 if (nombrecarta != primerNombre && nombrecarta != "JOKER") {
+
                                     cout << NEGRITA << MAGENTA<< "Debe coincidir con la primera carta (" << primerNombre 
                                          << ") o ser JOKER!" << RESET << endl;
+
                                     errorIngreso = true;
                                     continue;
                                 }
@@ -1286,29 +1325,32 @@ int main() {
 
                         // Verificar si se jugó un 8
                         if (CartaJugadas && CartaJugadas->nombre == "8") {
+
                             cout << NEGRO << NEGRITA << "\n8 STOP! Se limpia la mesa y el jugador puede jugar cualquier combinacion.\n" << RESET<<endl;
+
                             DevolverCartasJugadasMazo(&Mazo, &CartasEnMesa);
                             patron = 0; // Permite que el jugador elija cualquier patrón
                             rondaTerminada = true;
                         }
                         if (VerificarComplemento(CartaJugadas)){
-                            cout<<"Complemento "<<endl;
-                            MostrarCarta(CartaJugadas);
+
                             CartasJugadasMixtas(&CartaJugadas);
-                            cout<<"Complemento "<<endl;
-                            MostrarCarta(CartaJugadas);
                         }
                         // Verificar si hay revolución
                         if (VerificarRevolucion(CartaJugadas) ) {
                             if (!revolucion){
+
                                 cout << NEGRO << NEGRITA << "\n¡REVOLUCION! La jerarquia se invierte.\n"<< RESET<<endl;
                             }else{
                                 cout << NEGRO << NEGRITA << "\n¡CONTRAREVOLUCION! La jerarquia a su estado original.\n"<< RESET<<endl;
+
                             }
                             
                             InvertirJerarquia(&Jerarquia);
                             revolucion = !revolucion;
+
                             cout << AMARILLO << NEGRITA<< "Nueva jerarquia:\n"<<RESET<<endl;
+
                             MostrarJerarquia(Jerarquia);
                         }
 
@@ -1329,6 +1371,7 @@ int main() {
                 
                         int conturnos=0;
                         if (ultimoJugadorQueJugo > 4) ultimoJugadorQueJugo = 1;
+
                         while(conturnos<3){
                             Jugador *jugador = BuscarJugador(Malla, ultimoJugadorQueJugo);
                             if ((ContarCartas(jugador->lista_cartas) == 0)) {
@@ -1340,9 +1383,7 @@ int main() {
                             }
                             conturnos++;
                         }
-                    
-
-              
+                                  
                     }
                     j++;
                     jugada++;
@@ -1360,6 +1401,8 @@ int main() {
                 Jugador *jugador = BuscarJugador(Malla, ultimoJugadorQueJugo);
                 cout << NEGRO<< "\nJugador " << ultimoJugadorQueJugo << " elige el nuevo patron." << endl;
                 cout << NEGRO << "\nTus cartas:" << endl;
+
+              
                 MostrarCarta(jugador->lista_cartas);
                 
                 bool patronValido = false;
@@ -1377,6 +1420,7 @@ int main() {
                     cout<< RESET << NEGRITA << BLANCO;
                     cout << "-> Ingrese su eleccion: ";
                     cout << RESET;
+
                     cin >> patron;
                     
                     if (patron >= 1 && patron <= 4) {
@@ -1387,6 +1431,7 @@ int main() {
                         }
                     } else {
                         cout << NEGRITA<<MAGENTA <<"Opcion invalida. Por favor elige entre 1 y 4." << RESET<<endl;
+            
                     }
                     
                 }
@@ -1403,7 +1448,7 @@ int main() {
             tresDePicasEnMesa = false;
         }
 
-        // Fin de partida - Asignar puntos y rangos
+        // Fin de partida - Asignar puntos y rango
         cout << MAGENTA << NEGRITA <<"* * * *    F I N  P A R T I D A    * * * *"<< endl;
         cout<< RESET <<endl;
         
@@ -1413,6 +1458,7 @@ int main() {
         CompletarPodio(&Podio,Malla);
         if(CambioMagnate==true){
             //cout<<"Entra a la condicion FIN DE PARTIDA"<<endl;
+
             Turnos *Mendigo= BuscarTurnoNode(Podio, Magnate);
             MoverMendigo(&Podio, &Mendigo);
         }
@@ -1454,6 +1500,7 @@ int main() {
         Mendigo=Podio->next->next->next->nombre; cout<<"MENDIGO "<<Mendigo<<endl;
          
         cout << NEGRITA<< VERDE<< "----- MAGNATE - MENDIGO -----\n";
+
         Jugador* Mag = BuscarJugador(Malla, Magnate); 
         Mag->puntos+=30;
         Jugador* Men = BuscarJugador(Malla, Mendigo); 
@@ -1463,6 +1510,7 @@ int main() {
         cout<<"MENDIGO -- Jugador "<<Men->nombre<<endl;
         MostrarCarta(Men->lista_cartas);
         cout << "\nMoviendo las 2 cartas de mayor jerarquia del MENDIGO al MAGNATE ...\n";
+
         MoverDosMayores(Men,Mag,Jerarquia);
         cout << "\nAhora el MAGNATE seleccionará 2 cartas para mover al MENDIGO...\n";
         MoverCartasElegidas(Mag, Men);
@@ -1482,7 +1530,9 @@ int main() {
         MostrarCarta(Ric->lista_cartas);
         cout<<"POBRE -- Jugador "<<Pob->nombre<<endl;
         MostrarCarta(Pob->lista_cartas);
+      
         cout << "\nMoviendo la carta de mayor jerarquia del POBRE al RICO ...\n";
+
         MoverMayorCarta(Pob, Ric, Jerarquia);
         cout << "\nAhora el RICO seleccionará una carta para mover al POBRE...\n";
         MoverCartaElegida(Ric, Pob);
@@ -1496,6 +1546,7 @@ int main() {
     }
 
     cout << NEGRITA<<MAGENTA<< "\n=== JUEGO TERMINADO ===" << RESET<<endl;
+
     system("pause");
     return 0;
 }
