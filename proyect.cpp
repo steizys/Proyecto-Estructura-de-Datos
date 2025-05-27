@@ -915,10 +915,9 @@ int main() {
     for (int i = 1; i <= 4; i++) {
         InsertarJugador(&Malla, i);
     }
-    CrearMazo(&Mazo);
-    //InsercionCabeza(&Mazo, CrearCarta("8", "Pica"));
-    //InsercionCabeza(&Mazo, CrearCarta("7", "Pica"));
-    //InsercionCabeza(&Mazo, CrearCarta("10", "Corazon"));
+    //CrearMazo(&Mazo);
+    InsercionCabeza(&Mazo, CrearCarta("8", "Pica"));
+     InsercionCabeza(&Mazo, CrearCarta("K", "Pica"));
 
     // Variables del juego
     int j = 0; // Turno actual
@@ -936,33 +935,34 @@ int main() {
     //// PODIO ////
     int Magnate; int Rico; int Pobre; int Mendigo;
 
-    Reparticion(&Mazo, &Malla);
+    //Reparticion(&Mazo, &Malla);
 
     //JUGADOR 1
     Jugador *jugador = BuscarJugador(Malla,1);
-    //InsertarCarta(jugador, 1, "2","Corazon");
-    //InsertarCarta(jugador, 1, "2","Diamante");
+    InsertarCarta(jugador, 1, "2","Corazon");
+    InsertarCarta(jugador, 1, "2","Diamante");
 
     //JUGADOR 2
     Jugador *jugador2 = BuscarJugador(Malla,2);
-    //InsertarCarta(jugador2, 2, "3","Pica");
-    //InsertarCarta(jugador2, 2, "3","Diamante");
+    InsertarCarta(jugador2, 2, "3","Pica");
+    InsertarCarta(jugador2, 2, "3","Diamante");
 
     //JUGADOR 3
     Jugador *jugador3 = BuscarJugador(Malla,3);
-    /InsertarCarta(jugador3, 3, "7","Corazon");
+    InsertarCarta(jugador3, 3, "7","Corazon");
+    InsertarCarta(jugador3, 3, "5","Corazon");
 
     //JUGADOR 4
     Jugador *jugador4 = BuscarJugador(Malla,4);
-    //InsertarCarta(jugador4, 4, "5","Corazon");
-    //InsertarCarta(jugador4, 4, "8","Corazon");
+    InsertarCarta(jugador4, 4, "5","Corazon");
+    InsertarCarta(jugador4, 4, "8","Corazon");
 
     // Bucle principal del juego
     while (partidas < 3 ) {
         cout << "\n=== PARTIDA " << partidas << " ===" << endl;
         ronda = 0;
         Podio=NULL;
-        Magnate=NULL;
+        CambioMagnate=false;
         
         // Bucle de rondas
         while (JugadoresSinCartas(Malla) < 3 && !terminarRonda) {
@@ -1012,7 +1012,7 @@ int main() {
                     rondaTerminada=true;
                     continue;
                 } 
-                /*cout<< partidas<<" Partidas"<<endl;
+                cout<< partidas<<" Partidas"<<endl;
                 cout<<JugadoresSinCartas(Malla)<<" jugadores"<<endl;
                 if (Podio){
                     cout<<Podio->nombre<<" Podio"<<endl;
@@ -1020,13 +1020,14 @@ int main() {
                 if(Podio && partidas>1 && JugadoresSinCartas(Malla)==1){
                     cout<<"Entra a la condicion de magnate"<<endl;
                     if(Podio->nombre!=Magnate){
-                        cout<<"Hace el cambio de variable de magnate"<<endl;
+                        cout<<"Hace el cambio de variable de magnate "<<Magnate<<endl;
                         CambioMagnate=true;
                         Jugador *CartasMagnateViejo= BuscarJugador(Malla, Magnate);
+                        cout<<"Cartas magnate viejo"<<CartasMagnateViejo->nombre<<endl;
                         DevolverCartasJugadasMazo(&Mazo, &CartasMagnateViejo->lista_cartas);
 
                     }
-                }*/
+                }
                 cout<<"Jugadores sin carta dentro ronda: "<<JugadoresSinCartas(Malla)<<endl;
                 cout << "\nTurno del Jugador " << j << endl;
 
@@ -1177,6 +1178,7 @@ int main() {
 
                         
                         ultimoJugadorQueJugo = j;
+                        cout<<"ultimo k jugo dentro de la ronda "<<j<<endl;
 
                         // Verificar si se jugó un 8
                         if (CartaJugadas && CartaJugadas->nombre == "8") {
@@ -1186,7 +1188,11 @@ int main() {
                             rondaTerminada = true;
                         }
                         if (VerificarComplemento(CartaJugadas)){
+                            cout<<"Complemento "<<endl;
+                            MostrarCarta(CartaJugadas);
                             CartasJugadasMixtas(&CartaJugadas);
+                            cout<<"Complemento "<<endl;
+                            MostrarCarta(CartaJugadas);
                         }
                         // Verificar si hay revolución
                         if (VerificarRevolucion(CartaJugadas) ) {
@@ -1219,7 +1225,6 @@ int main() {
                 
                         int conturnos=0;
                         if (ultimoJugadorQueJugo > 4) ultimoJugadorQueJugo = 1;
-                        if(CambioMagnate && ultimoJugadorQueJugo==Magnate) ultimoJugadorQueJugo++;
                         while(conturnos<3){
                             Jugador *jugador = BuscarJugador(Malla, ultimoJugadorQueJugo);
                             if ((ContarCartas(jugador->lista_cartas) == 0)) {
@@ -1233,8 +1238,6 @@ int main() {
                         }
                     
 
-                        /***************************************** */
-                        
               
                     }
                     j++;
@@ -1288,8 +1291,10 @@ int main() {
         cout<<" --- FIN DE LA PARTIDA --- "<<endl;
         //Insertar_ColaPodio(&Podio,j);
         //cout<<"Orden en el que se quedan sin cartas "<<endl;
+        MostrarTurno(Podio);
         CompletarPodio(&Podio,Malla);
         if(CambioMagnate==true){
+            cout<<"Entra a la condicion FIN DE PARTIDA"<<endl;
             Turnos *Mendigo= BuscarTurnoNode(Podio, Magnate);
             MoverMendigo(&Podio, &Mendigo);
         }
