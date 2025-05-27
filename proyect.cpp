@@ -915,10 +915,10 @@ int main() {
     for (int i = 1; i <= 4; i++) {
         InsertarJugador(&Malla, i);
     }
-    //CrearMazo(&Mazo);
-    InsercionCabeza(&Mazo, CrearCarta("8", "Pica"));
-    InsercionCabeza(&Mazo, CrearCarta("7", "Pica"));
-    InsercionCabeza(&Mazo, CrearCarta("10", "Corazon"));
+    CrearMazo(&Mazo);
+    //InsercionCabeza(&Mazo, CrearCarta("8", "Pica"));
+    //InsercionCabeza(&Mazo, CrearCarta("7", "Pica"));
+    //InsercionCabeza(&Mazo, CrearCarta("10", "Corazon"));
 
     // Variables del juego
     int j = 0; // Turno actual
@@ -936,26 +936,26 @@ int main() {
     //// PODIO ////
     int Magnate; int Rico; int Pobre; int Mendigo;
 
-    //Reparticion(&Mazo, &Malla);
+    Reparticion(&Mazo, &Malla);
 
     //JUGADOR 1
     Jugador *jugador = BuscarJugador(Malla,1);
-    InsertarCarta(jugador, 1, "2","Corazon");
-    InsertarCarta(jugador, 1, "2","Diamante");
+    //InsertarCarta(jugador, 1, "2","Corazon");
+    //InsertarCarta(jugador, 1, "2","Diamante");
 
     //JUGADOR 2
     Jugador *jugador2 = BuscarJugador(Malla,2);
-    InsertarCarta(jugador2, 2, "3","Pica");
-    InsertarCarta(jugador2, 2, "3","Diamante");
+    //InsertarCarta(jugador2, 2, "3","Pica");
+    //InsertarCarta(jugador2, 2, "3","Diamante");
 
     //JUGADOR 3
     Jugador *jugador3 = BuscarJugador(Malla,3);
-    InsertarCarta(jugador3, 3, "7","Corazon");
+    /InsertarCarta(jugador3, 3, "7","Corazon");
 
     //JUGADOR 4
     Jugador *jugador4 = BuscarJugador(Malla,4);
-    InsertarCarta(jugador4, 4, "5","Corazon");
-    InsertarCarta(jugador4, 4, "8","Corazon");
+    //InsertarCarta(jugador4, 4, "5","Corazon");
+    //InsertarCarta(jugador4, 4, "8","Corazon");
 
     // Bucle principal del juego
     while (partidas < 3 ) {
